@@ -1,0 +1,11 @@
+'use strict';const {test}=require('node:test'),assert=require('node:assert/strict'),panel=require('./panel'),fs=require('fs'),path=require('path');const src=fs.readFileSync(path.join(__dirname,'index.js'),'utf8');
+const client=fs.readFileSync(path.join(__dirname,'panel-client.js'),'utf8');const html=panel.html({status:'Menunggu',version:'1.5.12-PRO',escapeHtml:x=>x});
+for(const section of ['Nomor Pengurus','Pengurus per Grup','Grup tempat Bot Berada','Pengajuan Menunggu','Simulasi Pengajuan','Riwayat','Rekap Harian','Spreadsheet Online','Log Sistem','Diagnostik'])test('Ada panel '+section,()=>assert.ok(html.includes(section)));
+test('Dashboard dilindungi login dan management akun',()=>{assert.ok(html.includes('Dashboard memerlukan login'));assert.ok(html.includes('10) Management Akun'))});
+test('Status awal server-side',()=>assert.ok(html.includes('Menunggu')));
+test('QR hidden ketika tidak tersedia',()=>assert.ok(html.includes('id="qrbox" class="hide"')));
+test('Polling HTTP 1,5 detik',()=>assert.ok(client.includes('},1500)')));
+test('Log polling 5 detik',()=>assert.ok(client.includes('},5000)')));
+test('Endpoint QR png',()=>assert.ok(src.includes("app.get('/qr.png'")));
+test('Endpoint /health',()=>assert.ok(src.includes("app.get('/health'")));
+test('Panel no-store',()=>assert.ok(src.includes("Cache-Control','no-store")));

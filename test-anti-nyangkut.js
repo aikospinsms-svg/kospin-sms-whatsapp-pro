@@ -1,0 +1,12 @@
+'use strict';const {test}=require('node:test'),assert=require('node:assert/strict'),L=require('./lib'),fs=require('fs'),path=require('path');
+const src=fs.readFileSync(path.join(__dirname,'index.js'),'utf8');
+const queue=[{id:'one',group:'a@g.us',status:'menunggu',createdAt:10},{id:'two',group:'a@g.us',status:'menunggu',createdAt:20},{id:'three',group:'b@g.us',status:'menunggu',createdAt:1}];
+test('FIFO pertama',()=>assert.equal(L.firstPending(queue,'a@g.us').id,'one'));
+test('FIFO berikutnya',()=>assert.equal(L.firstPending(queue.slice(1),'a@g.us').id,'two'));
+test('FIFO grup terpisah',()=>assert.equal(L.firstPending(queue,'b@g.us').id,'three'));
+test('FIFO kosong',()=>assert.equal(L.firstPending([],'b@g.us'),null));
+test('Sesi generasi untuk abaikan event lama',()=>assert.ok(src.includes('myGen!==sesiGen')));
+test('Kunci per pengajuan',()=>assert.ok(src.includes('locks.has(p.id)')));
+test('Intent tersimpan sebelum send',()=>assert.ok(src.indexOf('p.sending=true')<src.indexOf('sock.sendMessage(p.group,{text:L.formatConfirmation')));
+test('Tidak coba ulang send otomatis pada status tak pasti',()=>assert.ok(src.includes('p.deliveryError=e.message')));
+test('Port hanya loopback',()=>assert.ok(src.includes("server.listen(PORT,'127.0.0.1'")));

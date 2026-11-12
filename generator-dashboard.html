@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generator Pengajuan Pembayaran — Kospin SMS</title>
+<style>
+*{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}body{margin:0;background:#eef3fa;color:#15345c}.wrap{max-width:870px;margin:auto;padding:18px 18px 30px}h1{font-size:22px;margin:0 0 4px;color:#0c2e5b}h2{font-size:17px;margin:0;color:#0c2e5b}.sub,.hint{color:#596c83;font-size:13px;line-height:1.5}.info{background:#fff7e6;border-left:4px solid #e5b44b;border-radius:10px;padding:12px;margin:13px 0;font-size:13px;line-height:1.5}.card{background:#fff;border:1px solid #d9e5f4;border-radius:13px;padding:15px;margin:13px 0;box-shadow:0 2px 7px #0c2e5b09}label{display:block;margin:10px 0 5px;font-size:13px;font-weight:700}input,select,textarea{width:100%;font-size:15px;background:#fff;border:1.5px solid #b8c9df;border-radius:9px;padding:10px;min-width:0;color:#12345b}input:focus,select:focus,textarea:focus{outline:2px solid #b9d9ff;border-color:#0070f0}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}.line{display:flex;align-items:center;justify-content:space-between;gap:8px}.items{display:grid;gap:11px;margin-top:12px}.item{background:#f7fbff;border:1px solid #d1e2f9;border-radius:10px;padding:13px}.item h3{margin:0;font-size:14px;color:#0c2e5b}.btn{border:0;border-radius:10px;color:#fff;background:#0070f0;cursor:pointer;font-weight:700;font-size:14px;padding:12px 16px}.btn:disabled{opacity:.55;cursor:not-allowed}.outline{background:#fff;color:#0057b6;border:1px solid #8ab9f0}.danger{background:#fff3f2;color:#b42318;border:1px solid #f0a8a0}.wa{background:#24984b}.dark{background:#0c2e5b}.done{background:#c86b00}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions .full{grid-column:1/-1}.approvers{display:flex;flex-wrap:wrap;gap:8px;padding:4px 0}.tag{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid #bdd5f1;background:#eff7ff;border-radius:9px;font-size:13px}.tag input{width:auto;margin:0}.ok{min-height:18px;margin:12px 0;font-size:13px;font-weight:700;color:#19704e}.error{color:#b42318}.total{font-size:20px;font-weight:700;color:#0c2e5b}textarea{height:360px;line-height:1.55;font-size:13px;font-family:Consolas,monospace;resize:vertical}.auto{color:#198754;font-size:12px;font-weight:400}.hide{display:none!important}@media(max-width:560px){.row,.row3,.actions{grid-template-columns:1fr}.actions .full{grid-column:auto}.wrap{padding:12px}}
+</style></head><body><main class="wrap">
+<h1>Generator Pengajuan Pembayaran</h1><div class="sub">Satu kode URES untuk <strong>1–30 rincian pembayaran</strong>. Teks WhatsApp disusun secara formal dan konsisten. Bot hanya memproses pengajuan yang sudah disimpan dan disetujui pengurus di grup.</div>
+<div class="info"><b>Alur:</b> Pilih sumber dana → masukkan rincian pembayaran → pilih pengurus → <b>Simpan ke Dashboard</b> → salin/kirim satu pesan gabungan ke grup WA. Setelah selesai, klik <b>TASK SELESAI</b> untuk membuat URES baru. Jangan klik TASK SELESAI sebelum data disimpan.</div>
+<section class="card"><h2>Informasi Pengajuan</h2>
+<div class="row"><div><label for="kode">Kode URES <span class="auto">(unik per satu pesan WA)</span></label><input id="kode" value="URES-00001" autocomplete="off"></div><div><label for="tanggal">Tanggal</label><input id="tanggal" type="date"></div></div>
+<label for="unitSel">Unit</label><select id="unitSel"><option>J Chicken Ciledug</option><option>J Chicken Omega</option><option>Ulon Tuparev</option><option value="__lain__">Lainnya — isi manual</option></select><input id="unit" class="hide" style="margin-top:7px" placeholder="Nama unit lain">
+<label for="sumberSel">Sumber Dana <span class="auto">(17 pilihan rekening)</span></label><select id="sumberSel"><option value="">— Pilih rekening sumber dana —</option></select><input class="hide" id="sumber" style="margin-top:8px" placeholder="Masukkan rekening sumber bila tidak ada di pilihan">
+<label for="saldo">Saldo Sebelum (angka)</label><input id="saldo" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Contoh: 255704200.50">
+</section>
+<section class="card"><div class="line"><h2>Rincian Pembayaran</h2><button type="button" class="btn outline" onclick="addItem()">＋ Tambah Rincian</button></div>
+<div class="hint">Tambahkan setiap pembayaran sebagai rincian berbeda. Satu URES dan satu persetujuan pengurus berlaku untuk seluruh rincian di pesan ini.</div>
+<div id="items" class="items"></div><div class="line" style="margin-top:16px"><strong>Total seluruh rincian</strong><span id="total" class="total">Rp0</span></div>
+<div class="hint" id="itemCount">0 rincian</div><div class="hint">Perkiraan saldo sesudah: <b id="saldoAfter">-</b></div></section>
+<section class="card"><h2>Tag Pengurus</h2><p class="hint">Centang nama dari pengurus yang sudah didaftarkan di Menu 1, atau ketik nama tambahan dipisahkan koma. Bot hanya mengakui persetujuan dari nomor pengurus terdaftar.</p>
+<div id="approverOptions" class="approvers"><span class="hint">Memuat nama pengurus dari dashboard…</span></div>
+<label for="menunggu">Nama tambahan (pisahkan dengan koma)</label><input id="menunggu" placeholder="Contoh: Pak Miji, Pak Yuke"><p class="hint">Nama akan dibuat sebagai teks <b>@Nama</b> pada pengajuan. Tautan WhatsApp tidak dapat membuat mention notifikasi asli secara otomatis; pilih kontak ketika mengirim di grup bila ingin notifikasi tag sungguhan.</p>
+</section>
+<section class="card"><h2>Pratinjau Teks WhatsApp Profesional</h2><textarea id="hasil" readonly></textarea><div id="ok" class="ok"></div>
+<div class="actions"><button class="btn full" type="button" onclick="simpanDashboard()">💾 SIMPAN KE SPREADSHEET DASHBOARD</button><button class="btn dark" type="button" onclick="salin()">📋 SALIN TEKS</button><button class="btn wa" type="button" onclick="kirimWA()">💬 KIRIM KE WHATSAPP</button><button class="btn done full" type="button" onclick="taskSelesai()">✅ TASK SELESAI — BUAT PENGAJUAN BARU</button></div>
+<p class="hint">Status <b>DISETUJUI</b> hanya diperoleh setelah bot membaca persetujuan pengurus di grup. Status ini tidak sama dengan <b>SUDAH DIBAYAR</b>. Setelah disimpan/dikirim dan terdeteksi oleh bot, rincian tidak dapat diubah dengan kode yang sama.</p>
+</section></main>
+<script>
+'use strict';
+let LS='generatorPengajuan.v1.pending',csrfToken='',options={sources:[],approvers:[]},selectedApprovers=[],items=[blankItem()],lockUi=false;
+function el(id){return document.getElementById(id)}function g(id){return el(id).value.trim()}function set(id,val){el(id).value=val}
+function blankItem(){return {kategori:'',keperluan:'',nominal:'',tujuan:''}}
+function pad(n,w){return String(n).padStart(w,'0')}
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1,2)+'-'+pad(d.getDate(),2)}
+function nextKode(kode){const m=String(kode).match(/^(.*?)(\d+)\s*$/);return m?m[1]+pad(Number(m[2])+1,m[2].length):kode+'-00001'}
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function money(n,dec=0){return Number.isFinite(Number(n))?Number(n).toLocaleString('id-ID',{minimumFractionDigits:dec,maximumFractionDigits:dec}):'-'}
+function unitVal(){return g('unitSel')==='__lain__'?g('unit'):g('unitSel')}
+function setUnit(v){const sel=el('unitSel'),exists=[...sel.options].some(o=>o.value===v);sel.value=exists?v:'__lain__';el('unit').classList.toggle('hide',sel.value!=='__lain__');if(!exists)set('unit',v)}
+function sourceVal(){return g('sumberSel')==='__lain__'?g('sumber'):g('sumberSel')}
+function setSource(v){if(!v){set('sumberSel','');set('sumber','');el('sumber').classList.add('hide');return}const exists=[...el('sumberSel').options].some(o=>o.value===v);set('sumberSel',exists?v:'__lain__');set('sumber',exists?'':v);el('sumber').classList.toggle('hide',exists)}
+function chosenNames(){const picked=selectedApprovers.concat(g('menunggu').split(/[,;]+/));const seen=new Set;return picked.map(n=>n.replace(/^@/,'').trim()).filter(n=>{const k=n.toLowerCase();if(!n||seen.has(k))return false;seen.add(k);return true})}
+function menungguVal(){return chosenNames().map(n=>'@'+n).join(', ')}
+function sumItems(){return Math.round(items.reduce((a,x)=>a+(Number(x.nominal)||0),0)*100)/100}
+function payload(){return {formatVersion:'professional-v1',kode:g('kode').toUpperCase(),tanggal:g('tanggal'),unit:unitVal(),sumber:sourceVal(),saldo:g('saldo'),nominal:sumItems(),menunggu:menungguVal(),items:items.map(x=>({kategori:x.kategori,keperluan:x.keperluan,nominal:x.nominal,tujuan:x.tujuan}))}}
+function saveDraft(){if(lockUi)return;const st={kode:g('kode'),tanggal:g('tanggal'),unit:unitVal(),sumber:sourceVal(),saldo:g('saldo'),menunggu:g('menunggu'),selectedApprovers,items};try{localStorage.setItem(LS,JSON.stringify(st))}catch{}}
+function loadDraft(){let st=null;try{st=JSON.parse(localStorage.getItem(LS)||'null')}catch{}set('tanggal',todayStr());if(!st)return;for(const k of ['kode','saldo','menunggu'])if(st[k]!==undefined)set(k,st[k]);if(st.tanggal)set('tanggal',st.tanggal);if(st.unit)setUnit(st.unit);if(st.sumber)setSource(st.sumber);selectedApprovers=Array.isArray(st.selectedApprovers)?st.selectedApprovers:[];
+ if(Array.isArray(st.items)&&st.items.length){items=st.items.slice(0,30).map(x=>({kategori:x.kategori||'',keperluan:x.keperluan||'',nominal:x.nominal||'',tujuan:x.tujuan||''}))}else if(st.keperluan||st.nominal){items=[{kategori:st.kategori||'',keperluan:st.keperluan||'',nominal:st.nominal||'',tujuan:st.tujuan||''}]} }
+function renderApprovers(){el('approverOptions').innerHTML=options.approvers.length?options.approvers.map((name,i)=>'<label class="tag"><input type="checkbox" data-approver="'+i+'" '+(selectedApprovers.includes(name)?'checked':'')+'> '+escapeHtml(name)+'</label>').join(''):'<span class="hint">Nama pengurus belum tersedia. Daftarkan di Menu 1 atau isi kolom tambahan.</span>';el('approverOptions').querySelectorAll('[data-approver]').forEach(input=>input.addEventListener('change',()=>{const name=options.approvers[Number(input.dataset.approver)];selectedApprovers=input.checked?[...new Set([...selectedApprovers,name])]:selectedApprovers.filter(n=>n!==name);saveDraft();buat()}))}
+function renderItems(){el('items').innerHTML=items.map((item,i)=>`<article class="item"><div class="line"><h3>Rincian ${i+1}</h3><button type="button" class="btn danger" data-remove="${i}" ${items.length===1?'disabled':''}>Hapus</button></div><div class="row"><div><label>Kategori</label><input data-i="${i}" data-key="kategori" value="${escapeHtml(item.kategori)}" placeholder="Utilitas — Listrik"></div><div><label>Keperluan</label><input data-i="${i}" data-key="keperluan" value="${escapeHtml(item.keperluan)}" placeholder="Token Listrik Ruko"></div></div><label>Nominal (Rp)</label><input type="number" min="0.01" step="0.01" data-i="${i}" data-key="nominal" value="${escapeHtml(item.nominal)}" placeholder="1004000"><label>Tujuan / VA</label><input data-i="${i}" data-key="tujuan" value="${escapeHtml(item.tujuan)}" placeholder="VA BCA Shopee ..."></article>`).join('');el('items').querySelectorAll('[data-key]').forEach(input=>input.addEventListener('input',()=>{items[Number(input.dataset.i)][input.dataset.key]=input.value;saveDraft();buat()}));el('items').querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click',()=>{if(items.length<2)return;items.splice(Number(b.dataset.remove),1);renderItems();saveDraft();buat()}));buat()}
+function addItem(){if(items.length>=30){message('Maksimal 30 rincian dalam satu URES',true);return}items.push(blankItem());renderItems();saveDraft()}
+function buat(){
+ const p=payload(),date=(p.tanggal||'').split('-'),tgl=date.length===3?`${date[2]}/${date[1]}/${date[0]}`:'-';
+ const sal=Number(p.saldo),before=Number.isFinite(sal)&&p.saldo!==''?'Rp'+money(sal,sal%1?2:0):'Rp-';
+ const after=Number.isFinite(sal)&&p.saldo!==''?Math.round((sal-sumItems())*100)/100:null;
+ const detail=items.map((it,i)=>`${i+1}) Kategori: ${it.kategori}\n   Keperluan: ${it.keperluan}\n   Tujuan: ${it.tujuan}\n   Nominal: Rp${money(it.nominal,2).replace(/,00$/,'')}`).join('\n\n');
+ const lines=[
+  'PENGAJUAN PEMBAYARAN',
+  'Kode: '+p.kode,'Tanggal: '+tgl,'Unit: '+p.unit,'',
+  'Yth. Bapak/Ibu Pengurus,',
+  'Dengan hormat, kami mengajukan permohonan persetujuan pembayaran dengan rincian berikut:','',
+  'Sumber Dana: '+p.sumber,'Saldo Sebelum: '+before,'',
+  'Rincian Pembayaran:',detail,'',
+  'Total Item: '+items.length,
+  'Total Nominal: Rp'+money(sumItems(),2).replace(/,00$/,''),
+  'Estimasi Saldo Sesudah: '+(after===null?'Rp-':'Rp'+money(after,2).replace(/,00$/,'')),'',
+  'Menunggu: '+p.menunggu,'',
+  'Mohon persetujuan Bapak/Ibu agar pengajuan ini dapat ditindaklanjuti sesuai prosedur.',
+  'Terima kasih atas perhatian dan kerja samanya.'
+ ];
+ el('hasil').value=lines.join('\n');
+ el('total').textContent='Rp'+money(sumItems(),2).replace(/,00$/,'');
+ el('itemCount').textContent=items.length+' rincian pembayaran';
+ el('saldoAfter').textContent=after===null?'-':'Rp'+money(after,2).replace(/,00$/,'')+(after<0?' (saldo tidak mencukupi, periksa kembali)':'');
+ return lines.join('\n');
+}
+function message(msg,error=false){el('ok').textContent=msg;el('ok').classList.toggle('error',error)}
+async function api(path,body){const r=await fetch(path,{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','X-CSRF-Token':csrfToken},body:JSON.stringify(body)});let j;try{j=await r.json()}catch{throw Error('Server tidak mengembalikan JSON')}if(!r.ok||!j.ok)throw Error(j.error||'HTTP '+r.status);return j}
+async function previewServer(){return api('/generator/preview',payload())}
+async function simpanDashboard(){message('Menyimpan pengajuan…');try{const r=await api('/generator/entries',payload());message('✓ '+r.kode+' disimpan (belum berarti sudah dikirim/disetujui di WA).');if(window.parent!==window)window.parent.postMessage({type:'kospin-generator-saved',kode:r.kode},location.origin);return true}catch(e){message('GAGAL SIMPAN: '+e.message,true);return false}}
+async function salin(){try{const r=await previewServer();el('hasil').value=r.text;if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(r.text);else{el('hasil').select();if(!document.execCommand('copy'))throw Error('Browser tidak mengizinkan copy otomatis')}message('✓ Teks '+r.count+' rincian tersalin. Pastikan mention pengurus dipilih di grup WA.')}catch(e){message('Gagal menyalin: '+e.message,true)}}
+async function kirimWA(){try{const r=await previewServer();el('hasil').value=r.text;window.open('https://wa.me/?text='+encodeURIComponent(r.text),'_blank','noopener,noreferrer');message('WhatsApp dibuka. Pilih grup rekanan dan pastikan mention pengurus sebelum mengirim.')}catch(e){message('Gagal menyiapkan teks: '+e.message,true)}}
+async function taskSelesai(){if(!(await simpanDashboard()))return;const old=g('kode');const before=Number(g('saldo'));set('kode',nextKode(old));set('tanggal',todayStr());if(g('saldo')!=='')set('saldo',String(Math.round((before-sumItems())*100)/100));items=[blankItem()];renderItems();saveDraft();message('✓ '+old+' tersimpan. Kode berikutnya '+g('kode')+'. Status persetujuan tidak berubah.');scrollTo({top:0,behavior:'smooth'})}
+async function init(){try{const r=await fetch('/auth/me',{cache:'no-store'});if(!r.ok)throw Error('Login diperlukan');const j=await r.json();csrfToken=j.csrfToken;LS='generatorPengajuan.v1.'+j.user.id;const x=await fetch('/generator/options',{cache:'no-store'});if(!x.ok)throw Error('Pilihan pengurus/rekening gagal dimuat');options=await x.json();el('sumberSel').innerHTML='<option value="">— Pilih rekening sumber dana —</option>'+options.sources.map((s,i)=>`<option value="${escapeHtml(s)}">${i+1}. ${escapeHtml(s)}</option>`).join('')+'<option value="__lain__">Lainnya — isi manual</option>';loadDraft();renderApprovers();renderItems();buat();}catch(e){message('Login/konfigurasi gagal: '+e.message,true)}}
+for(const id of ['kode','tanggal','saldo','menunggu','unit','sumber'])el(id).addEventListener('input',()=>{saveDraft();buat()});
+el('sumberSel').addEventListener('change',()=>{el('sumber').classList.toggle('hide',g('sumberSel')!=='__lain__');saveDraft();buat()});el('unitSel').addEventListener('change',()=>{el('unit').classList.toggle('hide',g('unitSel')!=='__lain__');saveDraft();buat()});init();
+</script></body></html>

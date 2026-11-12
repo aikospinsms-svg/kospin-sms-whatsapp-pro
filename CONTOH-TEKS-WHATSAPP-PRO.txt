@@ -1,0 +1,32 @@
+CONTOH PESAN KOSPIN SMS v1.6.3 (DATA DUMMY, TIDAK UNTUK DIKIRIM)
+
+PENGAJUAN PEMBAYARAN
+Kode: URES-00001
+Tanggal: 12/11/2026
+Unit: Contoh Unit
+
+Yth. Bapak/Ibu Pengurus,
+Dengan hormat, kami mengajukan permohonan persetujuan pembayaran dengan rincian berikut:
+
+Sumber Dana: Kospin 01.101.000000 (CONTOH)
+Saldo Sebelum: Rp5.000.000
+
+Rincian Pembayaran:
+1) Kategori: Utilitas
+   Keperluan: Pembayaran listrik
+   Tujuan: VA CONTOH 123456
+   Nominal: Rp100.000
+
+2) Kategori: Operasional
+   Keperluan: Pembelian alat kebersihan
+   Tujuan: Rekening CONTOH 000123
+   Nominal: Rp200.000
+
+Total Item: 2
+Total Nominal: Rp300.000
+Estimasi Saldo Sesudah: Rp4.700.000
+
+Menunggu: @Pak Contoh
+
+Mohon persetujuan Bapak/Ibu agar pengajuan ini dapat ditindaklanjuti sesuai prosedur.
+Terima kasih atas perhatian dan kerja samanya.

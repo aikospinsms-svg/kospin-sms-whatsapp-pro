@@ -1,0 +1,14 @@
+'use strict';const {test}=require('node:test'),assert=require('node:assert/strict'),L=require('./lib');
+const demo=`PENGAJUAN PEMBAYARAN\nKode: URES-01458\nTanggal: 10/11/2026\nUnit: J Chicken Ciledug\nKategori: Utilitas — Listrik\nKeperluan: Token Listrik Ruko Amazy\nNo. Ref/Token: 24122363138\nNominal: Rp1.004.000\nSumber Dana: Kospin 01.101.008777 a.n. Kreasi Lima Cahaya\nSaldo Sebelum: Rp255.704.200,50\nTujuan: VA BCA Shopee GA — 126085111382340\nMenunggu: Pak Miji, Pak Yuke, Pak Adi`;
+test('Generator terdeteksi',()=>assert.equal(L.isGenerator(demo),true));
+test('Generator memenuhi deteksi pengajuan',()=>assert.equal(L.isPengajuan(demo),true));
+test('Kode generator',()=>assert.equal(L.extractKode(demo),'URES-01458'));
+test('Jumlah item 1',()=>assert.equal(L.itemAmounts(demo).items.length,1));
+test('Total generator',()=>assert.equal(L.itemAmounts(demo).total,1004000));
+test('Rincian internal generator benar',()=>assert.equal(L.itemAmounts(demo).items[0],'1) Token Listrik Ruko Amazy = Rp1.004.000'));
+test('Mention generator hanya Menunggu',()=>assert.deepEqual(L.parseTags(demo),['Pak Miji','Pak Yuke','Pak Adi']));
+test('Format konfirmasi',()=>assert.equal(L.formatConfirmation(demo,Date.now()),`Baik Pak @Pak Miji @Pak Yuke @Pak Adi, kami konfirmasi kembali pendebetan tanggal 10 November 2026 dari rekening 01.101.008777. Pengajuan sebagai berikut:\n\n${demo}\n\nKami bantu proses sesuai konfirmasi di atas ya, Pak. 🙏\nTerima kasih.`));
+test('Nominal kosong tidak direkayasa',()=>assert.deepEqual(L.itemAmounts(demo.replace('Nominal: Rp1.004.000','Nominal: ')).items,[]));
+test('Nominal generator tidak boleh dari saldo',()=>assert.equal(L.itemAmounts(demo.replace('Nominal: Rp1.004.000','Nominal: ')).total,0));
+test('Rekening generator dari Sumber Dana bukan tujuan VA',()=>assert.equal(L.extractRekening(demo),'01.101.008777'));
+for(let i=0;i<20;i++)test('Generator kode dinamis '+i,()=>assert.equal(L.extractKode(demo.replace('URES-01458',`URES-${String(i).padStart(5,'0')}`)),`URES-${String(i).padStart(5,'0')}`));

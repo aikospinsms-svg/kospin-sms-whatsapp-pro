@@ -1,0 +1,12 @@
+'use strict';const {test}=require('node:test'),assert=require('node:assert/strict'),L=require('./lib');
+const p={id:'1',createdAt:Date.UTC(2026,10,10),group:'123@g.us',groupName:'Grup Test',senderName:'Pengirim',senderNumber:'6281111',kode:'URES-01',account:'01.101.008777',items:['1) Item = Rp1.000'],total:1000,status:'menunggu',paid:false};
+test('14 kolom CSV',()=>assert.equal(L.HEADERS.length,14));
+test('14 nilai CSV',()=>assert.equal(L.rowOf(p).length,14));
+test('CSV diawali BOM',()=>assert.ok(L.csv([L.HEADERS]).startsWith('\ufeff')));
+test('CSV aman untuk tanda kutip dan koma',()=>assert.ok(L.csv([['A,"B"']]).includes('"A,""B"""')));
+test('MENUNGGU',()=>assert.equal(L.statusDisplay(p),'MENUNGGU'));
+test('DONE artinya disetujui',()=>assert.equal(L.statusDisplay({...p,status:'dikonfirmasi'}),'DONE'));
+test('DONE tidak berarti SUDAH',()=>assert.equal(L.rowOf({...p,status:'dikonfirmasi'})[10],'BELUM'));
+test('Bayar manual',()=>assert.equal(L.rowOf({...p,paid:true,status:'dikonfirmasi'})[10],'SUDAH'));
+test('Total disetujui saja',()=>assert.equal(L.dailyStats([p,{...p,id:'2',status:'dikonfirmasi'}],L.dayOf(p.createdAt)).total,1000));
+test('Rekap harian',()=>assert.match(L.renderRekap([{...p,status:'dikonfirmasi'}],p.group,L.dayOf(p.createdAt)),/Rp1\.000/));

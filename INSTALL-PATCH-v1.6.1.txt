@@ -1,0 +1,28 @@
+KOSPIN SMS — PATCH GENERATOR v1.6.1 UNTUK v1.6.0
+
+1. Tutup CMD bot yang sedang berjalan; JANGAN klik Logout WhatsApp.
+2. Backup SELURUH folder aplikasi, terutama auth, data, config.json.
+3. Ekstrak isi ZIP PATCH, salin file dan folder ke tempat index.js milik aplikasi lama.
+   Pilih Replace/Timpa file kode yang ditanyakan oleh Windows.
+   PATCH ini TIDAK berisi folder data, auth, config.json, users.json, atau kata sandi Anda.
+4. Jalankan MULAI-WINDOWS.bat, lalu buka http://localhost:3002/login dan login dengan AKUN LAMA.
+   TIDAK perlu membuat Super Admin baru.
+5. Buka Menu 8 — Generator. Pastikan muncul dropdown 17 Sumber Dana,
+   pilihan Tag Pengurus, dan tombol + Tambah Rincian.
+6. Bila Google Sheets Generator sudah aktif, backup spreadsheet online; di Apps Script
+   ganti kode generator lama dengan APPS-SCRIPT-GENERATOR-CONTOH.gs v1.6.1 dan
+   Deploy > Manage deployments > Edit > New version > Deploy.
+   Jika URL deployment berubah, masukkan URL /exec baru ke Menu 7.
+   Pastikan SECRET sama antara Apps Script dan dashboard.
+7. Di grup TEST buat satu URES dengan dua item, total benar, lalu uji IYA/👍 dari
+   nomor pengurus terdaftar. Verifikasi tab Pengajuan dan Rincian Pengajuan.
+
+CATATAN:
+- Satu URES untuk beberapa RINCIAN dalam SATU pesan, bukan beberapa pesan
+  dengan kode sama; duplikasi kode pesan akan ditolak.
+- Tag @Nama dalam teks TIDAK otomatis membuat notifikasi mention native di WA;
+  untuk mention notifikasi gunakan fitur @ pada WA grup ketika mengirim.
+- Status DISETUJUI tidak sama dengan SUDAH DIBAYAR.
+- Cek lagi nomor SIP RESTO 01.101.00880 sebelum dipakai produksi; angka ini
+  mengikuti input pengguna dan tidak diubah otomatis.
+- Pengujian offline berbeda dengan pengujian WhatsApp/Google Sheets nyata.

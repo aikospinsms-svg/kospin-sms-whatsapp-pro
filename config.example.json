@@ -1,0 +1,14 @@
+{
+  "approvers": [],
+  "groupApprovers": {},
+  "groups": [],
+  "rekapEnabled": true,
+  "rekapTime": "14:00",
+  "reminderEnabled": true,
+  "reminderHours": 2,
+  "sheetsUrl": "",
+  "sheetsSecret": "",
+  "generatorUrl": "",
+  "generatorSecret": "",
+  "botNumber": ""
+}

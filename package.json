@@ -1,0 +1,25 @@
+{
+  "name": "kospin-sms-whatsapp-konfirmasi-pro",
+  "version": "1.6.4",
+  "private": true,
+  "description": "Bot lokal WA: konfirmasi hanya URES terdaftar di Generator Dashboard, persetujuan pengurus wajib",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node scripts/fix-libsignal.js && node index.js",
+    "test": "node --test test-*.js",
+    "check": "node --check index.js && node --check lib.js && node --check panel.js && node --check panel-client.js && node --check generator-store.js && node --check source-accounts.js && node --check auth-manager.js && node --check login-page.js && node --check account-management-client.js && node --check route-permissions.js && node --check ures-gate.js && node --check report-export.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "6.7.24",
+    "express": "^4.21.2",
+    "pino": "^9.6.0",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.8.1"
+  },
+  "overrides": {
+    "libsignal": "6.0.0"
+  }
+}

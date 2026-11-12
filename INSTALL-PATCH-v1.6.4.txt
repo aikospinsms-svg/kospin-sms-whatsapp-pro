@@ -1,0 +1,44 @@
+KOSPIN SMS — PATCH v1.6.4 (EXPORT LAPORAN PROFESIONAL)
+===================================================
+Untuk pengguna v1.6.3 / v1.6.3-R1 yang sudah memiliki akun login.
+
+APA YANG BERUBAH
+- Menu 5 Riwayat menampilkan tombol: Unduh Riwayat Excel, Unduh Rekap Excel,
+  Unduh Riwayat CSV, Unduh Rekap CSV.
+- CSV baru menggunakan UTF-8 BOM, delimiter ; (titik koma), serta 'sep=;' agar
+  lebih mudah dibaca oleh Excel dengan regional Indonesia.
+- Kolom laporan menampilkan kode URES, sumber rekening, jumlah item, total nominal,
+  status persetujuan (DONE), penyetuju, status pembayaran, waktu bayar WIB.
+- Rekap Excel punya ringkasan angka, header navy, lebar kolom, filter, dan freeze.
+- Rekap Excel berisi kolom rincian pembayaran, sedangkan Riwayat Excel ringkas.
+- Total Rp0 tidak diisi fiktif: tersedia catatan untuk diperiksa.
+- Endpoint lama /history.csv dan /rekap.csv tetap dipertahankan.
+- Penyimpanan internal data/rekap-pengajuan.csv (14 kolom) dan Google Sheets tidak diubah.
+
+CARA UPDATE (WINDOWS)
+1. Di PC bot, tutup jendela CMD tempat bot berjalan. Jangan logout WhatsApp.
+2. BACKUP SELURUH FOLDER aplikasi, terutama auth, data, config.json.
+3. Ekstrak isi ZIP patch lalu copy semua file ke:
+     D:\ADAM\AUTOMATION\WhatsApp-Konfirmasi-PRO\
+   Pilih Replace / Timpa untuk file dengan nama sama.
+4. Jangan hapus/menimpa file config.json, auth/, data/ ataupun data akun.
+5. Jalankan MULAI-WINDOWS.bat seperti biasa.
+6. Buka http://localhost:3002/login dan login; tekan Ctrl + F5.
+7. Menu 5 Riwayat -> klik 'Unduh Riwayat Excel' atau 'Unduh Rekap Excel'.
+   Pilihan CSV juga tersedia bila perlu impor data.
+
+PERHATIAN
+- CSV tidak mendukung warna, lebar kolom, filter ataupun tipografi.
+  Gunakan XLSX untuk tampilan profesional dan menjaga nomor WA/rekening sebagai teks.
+- CSV lama tetap tersedia melalui URL /history.csv dan /rekap.csv bagi integrasi lama.
+  Endpoint laporan baru: /laporan/history.csv, /laporan/rekap.csv,
+  /laporan/history.xlsx, /laporan/rekap.xlsx. Semua memerlukan login dan hak export.
+- Unduhan meliputi riwayat yang tersimpan di bot (maksimal 200 riwayat tersimpan,
+  ditambah antrean). Tidak dapat memulihkan data yang sudah terhapus sebelumnya.
+- Nilai Rp0 di pengajuan lama harus diverifikasi; tidak diubah otomatis.
+- Tidak menambah paket npm/dependensi baru.
+
+PENGUJIAN DI LINGKUNGAN PEMBUATAN
+- 514 pengujian offline lulus termasuk 16 untuk laporan baru.
+- File contoh XLSX terbaca dalam parser workbook dan XML valid.
+- Perlu tes unduhan login pada browser & Excel Windows Anda.

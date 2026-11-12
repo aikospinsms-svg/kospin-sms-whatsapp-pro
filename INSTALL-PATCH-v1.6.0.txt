@@ -1,0 +1,23 @@
+KOSPIN SMS WhatsApp PRO v1.6.0 — PATCH MANAGEMENT AKUN
+
+UNTUK UPGRADE DARI v1.5.14-FIX-PENGURUS (atau v1.5.13 dengan patch sebelumnya):
+
+1. TUTUP bot yang berjalan (jendela CMD), tanpa logout WhatsApp.
+2. BACKUP SELURUH folder bot lama (khususnya auth, data, config.json).
+3. Ekstrak isi ZIP PATCH ini ke folder bot lama yang berisi index.js.
+   Pilih Replace/Timpa untuk file yang ditanyakan Windows.
+   Perhatikan: file ZIP PATCH tidak berisi auth, data, dan config.json.
+4. Sebelum menjalankan bot, jalankan SETUP-ADMIN-WINDOWS.bat
+   dan buat username + password Super Admin pertama (minimal 12 karakter, huruf dan angka).
+5. Jalankan MULAI-WINDOWS.bat yang sudah ada di folder bot lama.
+6. Buka http://localhost:3002/login, login Super Admin.
+7. Menu 10 — Management Akun: tambah Staff/Maker, Approver, Accounting, Admin Operasional, Auditor.
+8. Uji dengan grup WhatsApp TEST sebelum operasi nyata.
+
+JIKA AKUN SUPER ADMIN SUDAH ADA: jangan menjalankan setup lagi.
+Jika lupa password, MATIKAN bot, jalankan RESET-ADMIN-WINDOWS.bat, lalu nyalakan lagi.
+Jangan pernah membagikan users.json, audit-log.json, config.json atau folder auth.
+
+Logika approval WA tetap: HANYA nomor pengurus terdaftar di Menu 1 yang boleh IYA/👍. Role Approver dashboard hanya melihat informasi.
+
+Catatan: 423 tes offline lulus; koneksi WhatsApp dan aplikasi berjalan penuh di Windows tetap perlu diverifikasi.

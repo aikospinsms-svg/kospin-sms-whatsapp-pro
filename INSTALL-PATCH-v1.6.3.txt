@@ -1,0 +1,31 @@
+KOSPIN SMS | INSTAL PATCH v1.6.3 — GENERATOR PROFESIONAL
+======================================================
+Syarat: aplikasi WhatsApp PRO v1.6.2 sudah terpasang.
+
+1. Tutup jendela CMD bot. JANGAN klik Logout WhatsApp.
+2. Backup folder aplikasi lengkap, khususnya auth/, data/ (termasuk
+   data/ures-claims.json), dan config.json.
+3. Ekstrak KospinSMS-PATCH-v1.6.3-GENERATOR-PRO.zip.
+4. Salin SEMUA file dari ZIP ke folder instalasi lama tempat index.js berada,
+   misalnya C:\KospinSMS\WhatsApp-Konfirmasi-PRO\.
+   Pilih Replace/Timpa untuk file yang sama.
+5. JANGAN hapus config.json, auth/, data/, dan akun pengguna.
+6. Jalankan MULAI-WINDOWS.bat, buka http://localhost:3002/login,
+   login dengan akun sebelumnya dan tekan Ctrl+F5.
+7. Menu 8: buat URES BARU, pilih sumber dana, masukkan satu atau beberapa
+   rincian tanpa No. Ref / Token, pilih pengurus, lalu SIMPAN KE DASHBOARD.
+8. Klik SALIN TEKS; kirim utuh (tanpa diubah) ke grup WA TES yang dipantau.
+9. Pastikan bot memasukkan URES valid ke antrean, pengurus terdaftar
+   membalas IYA pada pesan dan bot hanya membalas satu kali.
+10. Cek Menu 9: nominal dan jumlah item benar, kolom No. Ref kosong.
+
+PENTING:
+- Format WA sebelum patch tetap dipertahankan untuk data URES lama.
+- Teks WA yang diedit, termasuk mention, bisa ditolak karena tidak identik
+  dengan data Generator. Jangan mengandalkan teks @Nama sebagai mention asli.
+- Integrasi Google Sheets tetap memakai 15 kolom lama; No. Ref baru kosong.
+  Tidak perlu deploy ulang Apps Script untuk perubahan ini.
+- Tidak ada pembayaran otomatis; DISETUJUI berbeda dengan SUDAH DIBAYAR.
+- Uji di grup tes dengan data dummy sebelum dipakai dalam transaksi nyata.
+
+PATCH v1.6.3-R1: file ures-gate.js dipulihkan ke ZIP. Pastikan ada di sebelah index.js.

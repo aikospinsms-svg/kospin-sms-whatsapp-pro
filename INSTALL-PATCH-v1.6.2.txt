@@ -1,0 +1,38 @@
+KOSPIN SMS | INSTALL PATCH v1.6.2 — MODE URES TERDAFTAR SAJA
+================================================================
+Syarat: aplikasi WhatsApp PRO v1.6.1 sudah terpasang dan dapat digunakan.
+
+1. Tutup jendela CMD yang menjalankan bot. JANGAN pilih Logout WhatsApp.
+2. Buat backup LENGKAP folder aplikasi.
+   Termasuk: auth/, data/, config.json, dan skrip utama.
+3. Buka file ZIP PATCH v1.6.2, ekstrak isinya.
+4. Salin file-file di dalam ZIP ke folder aplikasi lama, tempat index.js berada.
+   Contoh: C:\KospinSMS\WhatsApp-Konfirmasi-PRO\
+   Pilih REPLACE / TIMPA file program yang namanya sama.
+5. JANGAN hapus atau timpa auth/, data/, atau config.json.
+   Patch tidak menyertakan folder tersebut.
+6. Jalankan kembali MULAI-WINDOWS.bat.
+7. Buka http://localhost:3002/login dan login menggunakan akun yang sama.
+   Refresh Ctrl+F5.
+8. Menu 8 Generator: buat URES BARU dan klik SIMPAN KE SPREADSHEET DASHBOARD.
+9. Salin teks (jangan ubah) dan kirim ke GRUP TES yang sudah dipantau.
+10. Lihat Menu 3, pastikan 1 URES masuk MENUNGGU. Pengurus terdaftar
+    balas IYA / reaksi 👍. Pastikan pesan balasan bot HANYA terkirim sekali.
+11. Uji kode tidak dikenal, nominal diedit, pesan lama tanpa URES,
+    dan duplikat URES: bot harus DIAM dan hanya mencatat alasan di Log.
+
+PENTING
+- Untuk bot, sah = kode URES TERDAFTAR di Generator lokal + isi pengajuan sama
+  persis dengan yang disimpan + berasal dari grup yang dipantau.
+- URES hanya boleh digunakan sekali. Penambahan rincian harus selesai sebelum
+  pesan pertama dikirim ke WA. Jika perlu koreksi setelah pengajuan masuk WA,
+  buat URES baru; jangan pakai ulang kode lama.
+- Mode tanpa quote: IYA pengurus tetap menyetujui URES valid tertua (FIFO).
+  Lebih aman balas (Reply) langsung pesan pengajuan yang dimaksud.
+- Rincian pengajuan lebih dari satu tetap dalam SATU pesan WhatsApp.
+- Data lama tanpa URES valid tetap tersimpan untuk audit tetapi tidak dapat
+  menghasilkan konfirmasi baru.
+- Penambahan file data/ures-claims.json terjadi otomatis saat aplikasi mulai.
+  Cadangkan file ini juga pada backup berikutnya agar kode tidak dapat terpakai ulang.
+- Tanpa koneksi Google Sheets pun aturan URES berjalan dari database lokal.
+- Tidak ada pembayaran otomatis. Status DONE bukan SUDAH DIBAYAR.

@@ -1,0 +1,26 @@
+'use strict';const {test}=require('node:test'),assert=require('node:assert/strict'),L=require('./lib');
+const positives=['izin pengajuan pembayaran','mohon approve pembayaran','pengajuan URES-123','izin pengajuan URES-01','pengajuan pembayaran','izin pengajuan mohon approve'];
+for(const [j,p] of positives.entries())for(let i=0;i<15;i++)test(`Deteksi format lama positif ${j}-${i}`,()=>assert.equal(L.isPengajuan(`${'Halo '.repeat(i%3)}${i%2?p.toUpperCase():p}\nCatatan: keperluan ${i}`),true));
+const negatives=['mohon approve','transfer BCA','izin dana','pembayaran','rekanan','URES-01458','Saya siang','iya pak','ACC','sudah dibayar'];
+for(const [j,p] of negatives.entries())for(let i=0;i<8;i++)test(`Deteksi non pengajuan ${j}-${i}`,()=>assert.equal(L.isPengajuan(`${'Halo '.repeat(i%3)}${p}\nHanya pengingat ke ${i}`),false));
+const yes='IYA YA SETUJU APPROVE ACC OK OKE LANJUT LANJUTKAN LAKSANAKAN PROSES SIAP BOLEH SILAKAN GAS DEAL MANTAP BAIK'.split(' ');
+for(const token of yes)for(const prefix of ['', ' pak',' Pak Besar'])test(`Kata sah: ${token} ${prefix}`,()=>assert.equal(L.decision(token+prefix),'yes'));
+const nos='TIDAK TOLAK JANGAN BATAL NO BELUM'.split(' ');
+for(const token of nos)for(const prefix of ['', ' pak',' pak dulu'])test(`Kata tolak: ${token} ${prefix}`,()=>assert.equal(L.decision(token+prefix),'no'));
+for(let i=0;i<35;i++)test(`Kata keputusan tidak sah ${i}`,()=>assert.equal(L.decision(['👍','belum bisa proses sekarang','iya ini panjang sekali yang tidak dapat disetujui','baiklah','iya siang semuanya hari ini',''][i%6]),null));
+test('Nominal titik ribuan',()=>assert.equal(L.parseRupiah('Rp1.004.000'),1004000));
+test('Nominal desimal koma',()=>assert.equal(L.parseRupiah('Rp255.704.200,50'),255704200.5));
+test('Nominal kosong tidak diada-adakan',()=>assert.equal(L.parseRupiah(''),null));
+test('Keputusan emoji teks tidak valid',()=>assert.equal(L.decision('👍'),null));
+test('Tanggal teks asli',()=>assert.equal(L.parsedDate('Tanggal: 10/11/2026'),'10 November 2026'));
+test('Mengambil rekening terpanjang',()=>assert.equal(L.extractRekening('01.101.008777 dan 01.101.07'),'01.101.008777'));
+test('Tidak mengarang nomor rekening',()=>assert.equal(L.extractRekening('kospin NICKO CAHYA BCA'),''));
+test('Mengambil label rekening tanpa nomor',()=>assert.match(L.sourceAccount('izin pengajuan pembayaran menggunakan kospin NICKO CAHYA BCA / mohon approve pak'),/NICKO CAHYA BCA/));
+test('VA mengalahkan transfer BCA',()=>assert.equal(L.isEligible('Tujuan: VA BCA Shopee GA'),true));
+test('Transfer BCA mandiri biasa tidak ditangani',()=>assert.equal(L.isEligible('Pengajuan transfer bank BCA nomor 1234567890'),false));
+test('Teks asli utuh dalam konfirmasi',()=>{const original='Izin pengajuan pembayaran\nNo. ref 123\ncc @Kospin Sms';assert.ok(L.formatConfirmation(original,Date.UTC(2026,10,10)).includes(original))});
+test('Mention baris cc dikecualikan',()=>assert.deepEqual(L.parseTags('izin pengajuan pembayaran @MJC @Yuke Santoso\ncc @Kospin Sms'),['MJC','Yuke Santoso']));
+test('Dedup mention',()=>assert.deepEqual(L.parseTags('izin pengajuan pembayaran @Pak Adi @Pak Adi'),['Pak Adi']));
+test('Tanggal bukan hari ini',()=>assert.match(L.formatConfirmation('Tanggal: 10/11/2026\nPENGAJUAN PEMBAYARAN\nKode: URES-1\nNominal: Rp1.000'),/10 November 2026/));
+
+test('Inline cc tidak menjadi tag approval',()=>assert.deepEqual(L.parseTags('izin pengajuan pembayaran menggunakan kospin NICKO CAHYA / cc @Pengguna tak dikenal @Kospin Sms'),[]));
